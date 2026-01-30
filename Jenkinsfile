@@ -2,7 +2,7 @@ pipeline {
     agent any
 
     environment {
-        KUBECONFIG = "C:/Users/faizt/.kube/config"
+        KUBECONFIG = "C:/Users/sksah/.kube/config"
     }
 
     stages {
@@ -10,7 +10,7 @@ pipeline {
         stage('Checkout Code') {
             steps {
                 git branch: 'main',
-                    url: 'https://github.com/faiz-devops2026/user-student-management-system.git'
+                    url: 'https://github.com/sksah1842/user-student-management-system.git'
             }
         }
 
