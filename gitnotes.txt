@@ -1,0 +1,193 @@
+PART A — What Git & GitHub actually are (very important)
+🧠 Git vs GitHub (clear difference)
+
+Git
+👉 A tool installed on your computer
+👉 Tracks code changes, history, rollback
+
+GitHub
+👉 A website (cloud)
+👉 Stores your Git projects online
+👉 Used by teams, Jenkins, CI/CD
+
+📌 You need both.
+
+🔰 PART B — Create GitHub Account (Once in life)
+Step B1: Open GitHub website
+
+Go to 👉 github.com
+
+Step B2: Sign up
+
+Click Sign up
+
+Enter:
+
+Email
+
+Password
+
+Username (example: faiz-devops)
+
+Verify email
+
+✅ That’s it. Account ready.
+
+🔰 PART C — Install Git on Windows
+Step C1: Download Git
+
+Go to 👉 git-scm.com
+
+Click Download for Windows
+
+Download .exe
+
+Step C2: Install Git (IMPORTANT OPTIONS)
+
+During installation:
+✔️ Click Next on most screens
+✔️ Editor → Use default (Vim) OR choose Notepad
+✔️ PATH → Git from command line and 3rd-party software
+✔️ HTTPS backend → OpenSSL
+✔️ Line endings → Checkout Windows-style, commit Unix-style
+
+Click Install
+
+Step C3: Verify installation
+
+Open PowerShell and run:
+
+git --version
+
+
+If you see a version number → ✅ Git installed.
+
+🔰 PART D — Configure Git (ONE-TIME)
+
+Git needs to know who you are.
+
+git config --global user.name "Your Full Name"
+git config --global user.email "your-email@gmail.com"
+
+
+Check:
+
+git config --list
+
+🔰 PART E — Prepare Your Project for Git
+
+Go to your project folder:
+
+cd "C:\Users\faizt\OneDrive\Documents\Galgotia Teaching Contents\Hcl_Training 2025\Docker\user-student-management-system"
+
+Step E1: Create .gitignore
+
+Create a file named .gitignore in this folder and paste:
+
+# Maven
+target/
+
+# Logs
+*.log
+
+# IDE
+.idea/
+.vscode/
+*.iml
+
+# OS
+Thumbs.db
+.DS_Store
+
+# Secrets
+*.env
+
+
+📌 This prevents junk & secrets from going to GitHub.
+
+🔰 PART F — Initialize Git (FIRST TIME)
+git init
+
+
+You’ll see:
+
+Initialized empty Git repository
+
+Step F1: Check status
+git status
+
+
+You’ll see many Untracked files — this is normal.
+
+🔰 PART G — First Commit (VERY IMPORTANT)
+Step G1: Add files to Git
+git add .
+
+Step G2: Commit (save snapshot)
+git commit -m "Initial commit: auth, student services with k8s"
+
+
+📌 Think of commit as Save Game 🎮
+
+🔰 PART H — Create Repository on GitHub
+Step H1: On GitHub website
+
+Click + → New repository
+
+Repository name:
+
+user-student-management-system
+
+
+Visibility: Public or Private
+
+❌ Do NOT check README / .gitignore
+
+Click Create repository
+
+GitHub will show commands — don’t copy yet.
+
+🔰 PART I — Connect Local Project to GitHub
+Step I1: Rename branch to main
+git branch -M main
+
+Step I2: Add GitHub as remote
+git remote add origin https://github.com/<your-username>/user-student-management-system.git
+
+
+⚠️ Replace <your-username> with your GitHub username.
+
+Step I3: Push code to GitHub
+git push -u origin main
+
+
+🔐 GitHub will ask login:
+
+Browser opens
+
+Login once
+
+Allow access
+
+✅ Code uploaded 🎉
+
+🔰 PART J — Verify
+
+Open GitHub repository page
+You should see:
+
+auth-service
+
+student-service
+
+gateway
+
+k8s
+
+🧠 DAILY GIT COMMANDS (Remember only these)
+Task	Command
+Check status	git status
+Save changes	git add .
+Commit	git commit -m "message"
+Upload	git push
+Download	git pull

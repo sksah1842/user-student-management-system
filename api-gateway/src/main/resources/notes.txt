@@ -1,0 +1,9 @@
+
+
+basic authorization (no jwt used)
+
+POST http://localhost:8080/students
+
+Authorization → Basic Auth
+username: user
+password: generated password (from gateway log)

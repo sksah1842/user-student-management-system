@@ -1,0 +1,18 @@
+server:
+  port: 8085
+
+spring:
+  application:
+    name: api-gateway
+  profiles:
+    active: local
+
+# Testing - expose gateway endpoints for debugging
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "health,info,gateway"
+  endpoint:
+    gateway:
+      enabled: true

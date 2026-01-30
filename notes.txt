@@ -1,0 +1,75 @@
+
+
+here jwt based registration and login is performed on port 8081 in auth service  /auth/register and /auth/login
+
+here jwt based api/students is used on port 8082 for data sending via post method to store 
+
+# stop all docker containers
+docker ps -q | % { docker stop $_ }
+# remove all docker containers
+docker ps -aq | % { docker rm -f $_ }
+# remove all docker images
+docker images -q | % { docker rmi -f $_ }
+
+# 1. Change code
+# 2. Build JAR
+mvn clean package -DskipTests
+
+# 3. Rebuild & start mysql and auth-module     when code change
+docker compose up -d --build mysql auth-module
+
+# 4. Rebuild & start mysql, auth-module   when no code change
+docker compose up -d mysql auth-module
+
+
+# remove docker images
+docker rmi -f api-gateway:1.0
+
+# type in docker console
+# Build images
+docker build -t api-gateway:1.0 ./api-gateway
+docker build -t auth-service:1.0 ./auth-module
+docker build -t student-service:1.0 ./student-module
+
+# Kubernetes
+cd k8s
+kubectl apply -f mysql.yaml
+kubectl apply -f auth-deployment.yaml
+kubectl apply -f auth-service.yaml
+kubectl apply -f student-deployment.yaml
+kubectl apply -f student-service.yaml
+kubectl apply -f api-gateway-deployment.yaml
+kubectl apply -f api-gateway-service.yaml
+
+# if any change in k8s files  e.g. auth-service.yaml
+kubectl apply -f k8s/auth-service.yaml
+
+
+#  delete and restart pods
+kubectl delete pod -l app=auth
+
+kubectl delete pod auth-123	       Deletes one pod  and immediately create new pod
+kubectl rollout restart deployment auth	          Best practice restart
+kubectl delete deployment auth	         ❌ Deletes whole service
+
+How to stop it from recreating (important)
+Option 1️- Scale to zero (recommended)
+kubectl scale deployment auth-deployment --replicas=0     it will stop pod and stop recreating
+then 
+Bring it back:
+kubectl scale deployment auth-deployment --replicas=1
+
+#  delete Kubernetes deployments  all pods will be deleted permanently
+kubectl delete deployment auth-deployment
+kubectl delete deployment student-deployment
+kubectl delete deployment gateway-deployment
+
+# shows kubernetes log for auth service by start name auth,  we can track errors it will remain active tile ctrl+c
+kubectl logs -f -l app=auth
+
+
+# shows kubernetes log for auth service  by giving pod id we can track errors it will remain active tile ctrl+c
+kubectl logs -f auth-deployment-8665f5c69b-znbsz
+#  create new pod after deleting old one may take some time
+kubectl rollout restart deployment auth-deployment
+

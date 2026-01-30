@@ -1,0 +1,69 @@
+version: "3.8"
+
+services:
+  mysql:
+    image: mysql:8.4
+    container_name: mysql-db
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: app_db
+      MYSQL_USER: app_user
+      MYSQL_PASSWORD: app_pass
+    ports:
+      - "3307:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 40s
+    networks:
+      - ms-network
+
+  auth-module:
+    build: ./auth-module
+    container_name: auth-service
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
+    ports:
+      - "8083:8081"
+    depends_on:
+      mysql:
+        condition: service_healthy
+    networks:
+      - ms-network
+
+  student-module:
+    build: ./student-module
+    container_name: student-service
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
+    ports:
+      - "8084:8082"
+    depends_on:
+      mysql:
+        condition: service_healthy
+    networks:
+      - ms-network
+
+  api-gateway:
+    build: ./api-gateway
+    container_name: api-gateway
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
+    ports:
+      - "8085:8085"
+    depends_on:
+      - auth-module
+      - student-module
+    networks:
+      - ms-network
+
+networks:
+  ms-network:
+    driver: bridge
+
+volumes:
+  mysql_data:
